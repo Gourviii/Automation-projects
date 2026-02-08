@@ -1,0 +1,1201 @@
+{
+  "name": "Gmail Lead Nurturing and Calendly Booking Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "17ZFy-nPwnoeQdT0J_ote-hYpGHSH6G48DaVrHTHfrls",
+          "mode": "list",
+          "cachedResultName": "n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17ZFy-nPwnoeQdT0J_ote-hYpGHSH6G48DaVrHTHfrls/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17ZFy-nPwnoeQdT0J_ote-hYpGHSH6G48DaVrHTHfrls/edit#gid=0"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "id": "71e63dd3-6303-413a-909a-415c1b5fd7e3",
+      "name": "New Email in Sheet",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1440,
+        -816
+      ],
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "IoSsVuuhbcIOXZDB",
+          "name": "Google Sheets Trigger account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "734acca6-b2b9-464b-8dbc-1920e74553f0",
+              "name": "portfolia",
+              "value": "https://linkedup-24.vercel.app/",
+              "type": "string"
+            },
+            {
+              "id": "b8497187-9dc4-4164-af68-c4bbb9aa9f10",
+              "name": "packages",
+              "value": "https://docs.google.com/document/d/1XN1FLyIHEIvk746rRhnqBZ59oKf-6bcwp9NgQhhBs8g/edit?usp=sharing",
+              "type": "string"
+            },
+            {
+              "id": "763da7d5-de8f-49f7-abc9-65e45df7d0f5",
+              "name": "topmate link",
+              "value": "https://topmate.io/gourvi_tiwari/1915104 - discovery call!",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "e92323d6-d327-4ca9-9b70-ae4e3f21a20c",
+      "name": "Workflow Configuration",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1120,
+        -816
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $json['Initial Email Sent'] }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "id": "220f87cf-bcc8-43ff-ba96-75888968dd91",
+      "name": "Email Already Sent?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -816,
+        -816
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "to",
+              "value": "={{ $json.Email }}",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "recipientName",
+              "value": "={{ $json['Name '] }}",
+              "type": "string"
+            },
+            {
+              "id": "id-3",
+              "name": "emailSubject",
+              "value": "Want to turn your linkedin into brand!",
+              "type": "string"
+            },
+            {
+              "id": "id-4",
+              "name": "emailBody",
+              "value": "=Hi {{ $('Workflow Configuration').item.json['Name '] }} \n\nThis is Gourvi. I work as a LinkedIn brand strategist and help professionals, coaches and founders build a strong LinkedIn presence.\n\nThat usually includes content creation, profile optimization, lead generation and engagement support - so their profile does the heavy lifting for them.\n\nIf it makes sense, happy to share how this could work for your profile too.\n\nLooking forward for a conversation.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3854a816-16b0-43bb-9d06-493deeb93cf0",
+      "name": "Prepare Initial Email",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -416,
+        -832
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.to }}",
+        "subject": "= {{ $json.emailSubject }}",
+        "emailType": "text",
+        "message": "={{ $json.emailBody }}",
+        "options": {}
+      },
+      "id": "3aebeac2-ec22-4b9b-ae6b-4f49a20f3daf",
+      "name": "Send Initial Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -96,
+        -832
+      ],
+      "webhookId": "1fce248f-4b60-417d-ac12-8f6a578470d0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "oegK15x3eIvxE27N",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "17ZFy-nPwnoeQdT0J_ote-hYpGHSH6G48DaVrHTHfrls",
+          "mode": "list",
+          "cachedResultName": "n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17ZFy-nPwnoeQdT0J_ote-hYpGHSH6G48DaVrHTHfrls/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17ZFy-nPwnoeQdT0J_ote-hYpGHSH6G48DaVrHTHfrls/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Initial Email Sent": "={{ $json.labelIds[0] }}",
+            "Email": "={{ $('Prepare Initial Email').item.json.to }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Name ",
+              "displayName": "Name ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Country",
+              "displayName": "Country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Profession",
+              "displayName": "Profession",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Initial Email Sent",
+              "displayName": "Initial Email Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Follow-up Sent",
+              "displayName": "Follow-up Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "f2320fa1-a7ee-4a44-bcdf-88867b01b21c",
+      "name": "Log Initial Email Sent",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        -832
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IUxbUHh0W4K0G0xe",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $('Gmail Trigger').item.json.text }}\n\n",
+              "rightValue": "Want to know more | interested ",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "id": "ebc344a0-d607-4af2-81a9-5ed6efc40d95",
+      "name": "Contains \"want to know more\"?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -848,
+        -560
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "bookingName",
+              "value": "={{ $json.bookingName }}",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "bookingEmail",
+              "value": "={{ $('Edit Fields').item.json.email }}\n",
+              "type": "string"
+            },
+            {
+              "id": "id-3",
+              "name": "bookingTime",
+              "value": "={{ $('Edit Fields').item.json.bookingTime }}",
+              "type": "string"
+            },
+            {
+              "id": "id-5",
+              "name": "bookingDate",
+              "value": "={{ $('Edit Fields').item.json.bookingDate }}",
+              "type": "string"
+            },
+            {
+              "id": "080f3cdb-32c5-438c-a478-adb07faa207f",
+              "name": "source",
+              "value": "topmate.io",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4cb0d2aa-32cb-4c23-a20a-17801ad74811",
+      "name": "Extract Booking Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -352,
+        -320
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "17ZFy-nPwnoeQdT0J_ote-hYpGHSH6G48DaVrHTHfrls",
+          "mode": "list",
+          "cachedResultName": "n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17ZFy-nPwnoeQdT0J_ote-hYpGHSH6G48DaVrHTHfrls/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1044732288,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17ZFy-nPwnoeQdT0J_ote-hYpGHSH6G48DaVrHTHfrls/edit#gid=1044732288"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "BookingName": "={{ $json.bookingName }}",
+            "BookingEmail": "={{ $json.bookingEmail }}",
+            "BookingTime": "={{ $json.bookingTime }}",
+            "BookingDate": "={{ $json.bookingDate }}",
+            "Source": "={{ $json.source }}"
+          },
+          "matchingColumns": [
+            "BookingEmail"
+          ],
+          "schema": [
+            {
+              "id": "BookingName",
+              "displayName": "BookingName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "BookingEmail",
+              "displayName": "BookingEmail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "BookingTime",
+              "displayName": "BookingTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "BookingDate",
+              "displayName": "BookingDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "5dadaca6-b035-4380-ba5b-db395dfcb8f4",
+      "name": "Record Booking in Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -64,
+        -320
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IUxbUHh0W4K0G0xe",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('If').item.json.email }}",
+        "subject": "Your Topmate booking is confirmed",
+        "emailType": "text",
+        "message": "=Hi {{ $json.BookingName }}\nYour session \" is confirmed.\n\nDate : {{ $('Extract Booking Data').item.json.bookingDate }}\nTime : {{ $('Extract Booking Data').item.json.bookingTime }}\n\nLooking forward to speaking with you.\n\n– Gourvi",
+        "options": {}
+      },
+      "id": "88953958-c079-43bf-af90-7cffdd2545ac",
+      "name": "Send Booking Confirmation",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        -320
+      ],
+      "webhookId": "efc6c9fd-75f7-4d19-975a-c5cebb7ddfd7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "oegK15x3eIvxE27N",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "17ZFy-nPwnoeQdT0J_ote-hYpGHSH6G48DaVrHTHfrls",
+          "mode": "list",
+          "cachedResultName": "n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17ZFy-nPwnoeQdT0J_ote-hYpGHSH6G48DaVrHTHfrls/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17ZFy-nPwnoeQdT0J_ote-hYpGHSH6G48DaVrHTHfrls/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Follow-up Sent": "={{ $json.labelIds[0] }}",
+            "Email": "={{ $('Code in JavaScript1').item.json.senderEmail }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Name ",
+              "displayName": "Name ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Country",
+              "displayName": "Country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Profession",
+              "displayName": "Profession",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Initial Email Sent",
+              "displayName": "Initial Email Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Follow-up Sent",
+              "displayName": "Follow-up Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "345d86d4-e03e-447d-91b5-5c5b89205632",
+      "name": "Log Follow-up Email Sent",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        64,
+        -544
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IUxbUHh0W4K0G0xe",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {
+          "includeSpamTrash": false
+        },
+        "options": {
+          "dataPropertyAttachmentsPrefixName": "attachment_",
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1408,
+        -560
+      ],
+      "id": "5dad2699-c1ed-4d17-964a-65d4f8c6e533",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "oegK15x3eIvxE27N",
+          "name": "Gmail account"
+        }
+      },
+      "notes": "say it have error"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Gmail Trigger').item.json.from.value[0].address }}",
+        "subject": "={{ $json.subject }}",
+        "emailType": "text",
+        "message": "={{ $json.Body }}",
+        "options": {}
+      },
+      "id": "696d6c86-9cd1-48d2-9d86-c83a68f2e7e0",
+      "name": "Send Follow-up with Links",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -240,
+        -544
+      ],
+      "webhookId": "eabd2975-6fc5-42f0-af5c-531a0fe6136f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "oegK15x3eIvxE27N",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f25d9e83-2a5a-4cd7-9f4a-3922ad546ab5",
+              "name": "Recipient email",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "a907bf52-0f7f-4910-a519-4bd9ed9e362c",
+              "name": "subject",
+              "value": "={{ $('Gmail Trigger').item.json.subject }}",
+              "type": "string"
+            },
+            {
+              "id": "64ea3c10-0df7-4510-b0b2-5eb39def4ca3",
+              "name": "=Body",
+              "value": "thankyou for showing interest, book a call -https://topmate.io/gourvi_tiwari/1915104 - discovery call!",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1064566e-1245-4bbd-a0cb-93e63a08ef13",
+      "name": "Prepare Follow-up Email",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -528,
+        -544
+      ]
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {
+          "q": "call request",
+          "sender": "topmate.io"
+        },
+        "options": {
+          "dataPropertyAttachmentsPrefixName": "text"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1456,
+        -304
+      ],
+      "id": "365a88b0-f299-4a36-a918-c90c8e03b68e",
+      "name": "Gmail Trigger1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "oegK15x3eIvxE27N",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "03af1645-01db-4bb7-babd-f4d7918d51be",
+              "leftValue": "={{ $('Gmail Trigger1').item.json.subject }}",
+              "rightValue": "call request",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -656,
+        -304
+      ],
+      "id": "3c948cda-1033-4608-888c-e495219ab9f4",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.textAsHtml || $json.html || $json.text || '';\nconst raw = $json.text || $json.textAsHtml || $json.html || '';\n\n// Extract email from body\nconst emailMatch = body.match(\n  /Email[\\s\\S]*?([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})/\n);\n\n// Helper function to extract value after label from raw\nfunction extract(label) {\n  const regex = new RegExp(`${label}:?\\\\s*([^\\n<]+)`, 'i');\n  const match = raw.match(regex);\n  return match ? match[1].trim() : '';\n}\n\n// Extract fields from raw\nconst bookingName = extract('with');\nconst bookingDateTime = extract('When');\nconst bookingPhone = extract('Phone');\n\n// Split date & time (optional)\nlet bookingDate = '';\nlet bookingTime = '';\nif (bookingDateTime) {\n  const parts = bookingDateTime.split(',');\n  bookingDate = parts.slice(0, 2).join(',').trim();\n  bookingTime = parts.slice(2).join(',').trim();\n}\n\nreturn [{\n  json: {\n    clientEmail: emailMatch ? emailMatch[1] : null,\n    bookingName,\n    bookingPhone,\n    bookingDate,\n    bookingTime,\n    source: 'topmate.io'\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1200,
+        -304
+      ],
+      "id": "b050eaa9-99a8-481f-a59e-4874a057da48",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "67aade75-67f8-4dc1-9585-30cdb27890c2",
+              "name": "email",
+              "value": "={{ $json.clientEmail }}",
+              "type": "string"
+            },
+            {
+              "id": "ba3ac707-ec20-4af9-9b06-1aeb58fc1d3c",
+              "name": "bookingDate",
+              "value": "={{ $json.bookingDate }}",
+              "type": "string"
+            },
+            {
+              "id": "ccd18e75-5b8b-4eda-8819-7431c4764cee",
+              "name": "bookingTime",
+              "value": "={{ $json.bookingTime }}",
+              "type": "string"
+            },
+            {
+              "id": "4d8ca1e9-4eba-4d19-9510-b6c70ffda561",
+              "name": "bookingName",
+              "value": "={{ $json.bookingName }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -944,
+        -304
+      ],
+      "id": "215f73ce-ca3e-4806-adff-d829205ff199",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "17ZFy-nPwnoeQdT0J_ote-hYpGHSH6G48DaVrHTHfrls",
+          "mode": "list",
+          "cachedResultName": "n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17ZFy-nPwnoeQdT0J_ote-hYpGHSH6G48DaVrHTHfrls/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "email",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17ZFy-nPwnoeQdT0J_ote-hYpGHSH6G48DaVrHTHfrls/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Edit Fields').item.json.email }}",
+            "Confirmation email sent": "={{ $json.labelIds[0] }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Name ",
+              "displayName": "Name ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Thread id",
+              "displayName": "Thread id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Country",
+              "displayName": "Country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Profession",
+              "displayName": "Profession",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Initial Email Sent",
+              "displayName": "Initial Email Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Follow-up Sent",
+              "displayName": "Follow-up Sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Confirmation email sent",
+              "displayName": "Confirmation email sent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "e415e536-fe8b-44e9-98f6-2b2204892716",
+      "name": "Log confirmation Email Sent1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        416,
+        -320
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IUxbUHh0W4K0G0xe",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst senderEmail = items[0]?.json?.from?.value[0]?.address;\n\nreturn [{ json: { senderEmail } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1184,
+        -560
+      ],
+      "id": "25917690-d302-45b5-b94b-a7531b0f693b",
+      "name": "Code in JavaScript1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "New Email in Sheet": {
+      "main": [
+        [
+          {
+            "node": "Workflow Configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Workflow Configuration": {
+      "main": [
+        [
+          {
+            "node": "Email Already Sent?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Already Sent?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Initial Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Prepare Initial Email": {
+      "main": [
+        [
+          {
+            "node": "Send Initial Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Initial Email": {
+      "main": [
+        [
+          {
+            "node": "Log Initial Email Sent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contains \"want to know more\"?": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Prepare Follow-up Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Booking Data": {
+      "main": [
+        [
+          {
+            "node": "Record Booking in Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Record Booking in Sheet": {
+      "main": [
+        [
+          {
+            "node": "Send Booking Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Initial Email Sent": {
+      "main": [
+        []
+      ]
+    },
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Follow-up with Links": {
+      "main": [
+        [
+          {
+            "node": "Log Follow-up Email Sent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Follow-up Email": {
+      "main": [
+        [
+          {
+            "node": "Send Follow-up with Links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Booking Confirmation": {
+      "main": [
+        [
+          {
+            "node": "Log confirmation Email Sent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Follow-up Email Sent": {
+      "main": [
+        []
+      ]
+    },
+    "Gmail Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Extract Booking Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Contains \"want to know more\"?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "87b895f5-cfd6-419b-9be5-68ed6dee2820",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5f4b464849513507e0713bfdc8aef597ad1840a82a55e69f2a19848e79c79ff5"
+  },
+  "id": "Bw4faF8j4tEjap0ghiLcJ",
+  "tags": []
+}
